@@ -82,4 +82,4 @@ ryoko/
 
 ## Built By
 
-Mithil Saxena — [GitHub](https://github.com/Mithil-Saxena)
+Mithil Saxena - [GitHub](https://github.com/Mithil-Saxena)
