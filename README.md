@@ -1,41 +1,85 @@
-<<<<<<< HEAD
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RYOKO ✈️
+
+An AI-powered conversational travel planner that turns your travel ideas into complete day-by-day itineraries.
+
+## What it does
+
+RYOKO feels like talking to a well-traveled friend. Instead of filling out forms, you just describe what you want - and RYOKO figures out the rest.
+
+**The flow:**
+1. **Chat** - Tell RYOKO where you want to go, your budget, duration, and vibe in plain language
+2. **Discover** - Browse city tiles with real photos, attractions, and local tips. RYOKO also recommends the optimal route for your trip
+3. **Plan** - Get a complete day-by-day itinerary with activities, accommodation, transport, and a full budget breakdown
+4. **Explore** - View your route on an interactive map with numbered stops
+
+## Features
+
+- 🗣️ Natural language trip planning - no forms, no dropdowns
+- 🏙️ City discovery with real travel photos via Pexels
+- 🗺️ Interactive map with numbered day markers and route lines
+- 💰 Budget breakdown with live price links to Google Flights and Booking.com
+- ✨ Smart route recommendations based on your trip type
+- 🌍 Works for any destination worldwide
+
+## Tech Stack
+
+- **Framework** - Next.js 14+ with App Router
+- **Styling** - Tailwind CSS
+- **AI** - Groq API (Llama 3.3 70B)
+- **Maps** - Leaflet.js + OpenStreetMap
+- **Images** - Pexels API
+- **Deployment** - Vercel
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- Node.js 18+
+- Groq API key - [console.groq.com](https://console.groq.com)
+- Pexels API key - [pexels.com/api](https://www.pexels.com/api)
+
+### Installation
+
+```bash
+git clone https://github.com/Mithil-Saxena/RYOKO.git
+cd ryoko
+npm install
+```
+
+Create a `.env.local` file in the root:
+GROQ_API_KEY=your_groq_key_here
+PEXELS_API_KEY=your_pexels_key_here
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Live Demo
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+[ryoko-virid.vercel.app](https://ryoko-virid.vercel.app)
 
-## Learn More
+## Project Structure
+ryoko/
+├── app/
+│   ├── page.tsx              # Landing page with rotating prompts
+│   ├── chat/page.tsx         # Main split-view chat + output
+│   └── api/
+│       ├── chat/route.ts     # Groq conversation handler
+│       ├── cities/route.ts   # City suggestions + images
+│       └── itinerary/route.ts # Full itinerary generator
+├── components/
+│   ├── CityTile.tsx          # City card with image and attractions
+│   ├── CityDetail.tsx        # Full city detail overlay
+│   ├── ItineraryView.tsx     # Day-by-day itinerary renderer
+│   └── MapView.tsx           # Leaflet map with numbered pins
+└── lib/
+├── gemini.ts             # AI client setup
+└── pexels.ts             # Image fetcher
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Built By
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-=======
-# RYOKO
-AI-powered conversational travel planner
->>>>>>> cb80a8e81e356de0406f3b29314f93718c3ae857
+Mithil Saxena — [GitHub](https://github.com/Mithil-Saxena)
