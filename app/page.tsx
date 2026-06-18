@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { row1, row2, row3 } from '@/lib/landingImages';
@@ -54,13 +54,22 @@ function ImageRow({ images, direction }: { images: string[]; direction: 'left' |
 export default function Home() {
   const [currentPrompt, setCurrentPrompt] = useState(0);
   const [input, setInput] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentPrompt((prev) => (prev + 1) % prompts.length);
     }, 3000);
-    return () => clearInterval(interval);
+
+    const focusTimer = setTimeout(() => {
+      inputRef.current?.focus();
+    }, 300);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(focusTimer);
+    };
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -84,7 +93,7 @@ export default function Home() {
         <ImageRow images={row3} direction="right" />
       </div>
 
-      {/* Dark overlay for readability */}
+      {/* Dark overlay */}
       <div
         className="absolute inset-0"
         style={{
@@ -92,17 +101,47 @@ export default function Home() {
         }}
       />
 
+      {/* Animated orb behind logo */}
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          width: '400px',
+          height: '400px',
+          background: 'radial-gradient(circle, #c9a84c0a 0%, transparent 70%)',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+        animate={{ scale: [1, 1.15, 1] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+      />
+
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center">
+
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-7xl font-bold tracking-widest mb-12"
-          style={{ color: '#c9a84c', fontFamily: 'Playfair Display, serif' }}
+          className="text-7xl font-bold tracking-widest mb-4"
+          style={{
+            color: '#c9a84c',
+            fontFamily: 'Playfair Display, serif',
+            textShadow: '0 0 60px #c9a84c44',
+          }}
         >
           RYOKO
         </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="text-xs tracking-widest mb-12"
+          style={{ color: '#c9a84c66' }}
+        >
+          AI TRAVEL PLANNER
+        </motion.p>
 
         <div className="h-10 mb-8 overflow-hidden">
           <AnimatePresence mode="wait">
@@ -128,10 +167,14 @@ export default function Home() {
           className="w-full max-w-xl px-4"
         >
           <input
+            ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSubmit(e as unknown as React.FormEvent)}
             placeholder="Type anything..."
+            autoComplete="off"
+            spellCheck={false}
             className="w-full px-6 py-4 rounded-full text-white outline-none text-base"
             style={{
               backgroundColor: '#131929cc',
@@ -151,6 +194,7 @@ export default function Home() {
         >
           Press Enter to begin your journey
         </motion.p>
+
       </div>
     </main>
   );
