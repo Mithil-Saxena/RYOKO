@@ -2,7 +2,7 @@
 import CityTile from '@/components/CityTile';
 import CityDetail from '@/components/CityDetail';
 import ItineraryView from '@/components/ItineraryView';
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, Suspense, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 interface City {
@@ -58,6 +58,7 @@ function ChatContent() {
   const [recommendedRoute, setRecommendedRoute] = useState<string[]>([]);
   const [routeReason, setRouteReason] = useState('');
   const searchParams = useSearchParams();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const sendToGemini = async (msgs: { role: string; content: string }[]) => {
     setLoading(true);
@@ -96,6 +97,9 @@ function ChatContent() {
       const initial = { role: 'user', content: q };
       setMessages([initial]);
       sendToGemini([initial]);
+    } else {
+      // Focus input when no query param
+      inputRef.current?.focus();
     }
   }, []);
 
@@ -190,6 +194,7 @@ function ChatContent() {
         <div className="p-4 border-t" style={{ borderColor: '#c9a84c22' }}>
           <div className="flex gap-2">
             <input
+              ref={inputRef}
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -198,7 +203,6 @@ function ChatContent() {
               className="flex-1 px-4 py-2 rounded-full text-sm text-white outline-none"
               style={{ backgroundColor: '#131929', border: '1px solid #c9a84c44' }}
               disabled={loading}
-              autoFocus
             />
             <button
               onClick={sendMessage}
