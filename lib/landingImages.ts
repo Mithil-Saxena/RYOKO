@@ -22,5 +22,5 @@ export const row3 = [
   "https://images.pexels.com/photos/2901209/pexels-photo-2901209.jpeg",
   "https://images.pexels.com/photos/1010657/pexels-photo-1010657.jpeg",
   "https://images.pexels.com/photos/2614818/pexels-photo-2614818.jpeg",
-  "https://images.pexels.com/photos/3601452/pexels-photo-3601452.jpeg",
+  "https://images.pexels.com/photos/20627075/pexels-photo-20627075.jpeg",
 ];

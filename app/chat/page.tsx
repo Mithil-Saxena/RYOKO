@@ -198,6 +198,7 @@ function ChatContent() {
               className="flex-1 px-4 py-2 rounded-full text-sm text-white outline-none"
               style={{ backgroundColor: '#131929', border: '1px solid #c9a84c44' }}
               disabled={loading}
+              autoFocus
             />
             <button
               onClick={sendMessage}
