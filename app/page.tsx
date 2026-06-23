@@ -58,19 +58,19 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentPrompt((prev) => (prev + 1) % prompts.length);
-    }, 3000);
+  const interval = setInterval(() => {
+    setCurrentPrompt((prev) => (prev + 1) % prompts.length);
+  }, 3000);
 
-    const focusTimer = setTimeout(() => {
-      inputRef.current?.focus();
-    }, 300);
+  const focusTimer = setTimeout(() => {
+    inputRef.current?.focus();
+  }, 800);
 
-    return () => {
-      clearInterval(interval);
-      clearTimeout(focusTimer);
-    };
-  }, []);
+  return () => {
+    clearInterval(interval);
+    clearTimeout(focusTimer);
+  };
+}, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -170,6 +170,7 @@ export default function Home() {
             ref={inputRef}
             type="text"
             value={input}
+            onClick={() => inputRef.current?.focus()}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSubmit(e as unknown as React.FormEvent)}
             placeholder="Type anything..."

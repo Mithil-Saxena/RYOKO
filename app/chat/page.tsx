@@ -58,7 +58,23 @@ function ChatContent() {
   const [recommendedRoute, setRecommendedRoute] = useState<string[]>([]);
   const [routeReason, setRouteReason] = useState('');
   const searchParams = useSearchParams();
-  const inputRef = useRef<HTMLInputElement>(null);
+  const chatInputRef = useRef<HTMLInputElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const t1 = setTimeout(() => chatInputRef.current?.focus(), 100);
+    const t2 = setTimeout(() => chatInputRef.current?.focus(), 500);
+    const t3 = setTimeout(() => chatInputRef.current?.focus(), 1000);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, []);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   const sendToGemini = async (msgs: { role: string; content: string }[]) => {
     setLoading(true);
@@ -97,9 +113,6 @@ function ChatContent() {
       const initial = { role: 'user', content: q };
       setMessages([initial]);
       sendToGemini([initial]);
-    } else {
-      // Focus input when no query param
-      inputRef.current?.focus();
     }
   }, []);
 
@@ -154,8 +167,44 @@ function ChatContent() {
   return (
     <div className="flex h-screen overflow-hidden" style={{ backgroundColor: '#0a0f1e' }}>
 
+      {/* Animated Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
+        <div className="absolute rounded-full" style={{
+          width: '600px', height: '600px', top: '-200px', left: '-200px',
+          background: 'radial-gradient(circle, #c9a84c35 0%, transparent 70%)',
+          animation: 'float1 18s ease-in-out infinite',
+        }} />
+        <div className="absolute rounded-full" style={{
+          width: '500px', height: '500px', top: '30%', right: '-150px',
+          background: 'radial-gradient(circle, #1a3a6c45 0%, transparent 70%)',
+          animation: 'float2 22s ease-in-out infinite',
+        }} />
+        <div className="absolute rounded-full" style={{
+          width: '400px', height: '400px', bottom: '-100px', left: '30%',
+          background: 'radial-gradient(circle, #c9a84c28 0%, transparent 70%)',
+          animation: 'float3 26s ease-in-out infinite',
+        }} />
+        <style>{`
+          @keyframes float1 {
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(40px, 30px) scale(1.05); }
+            66% { transform: translate(-20px, 50px) scale(0.95); }
+          }
+          @keyframes float2 {
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(-50px, 40px) scale(1.08); }
+            66% { transform: translate(30px, -30px) scale(0.97); }
+          }
+          @keyframes float3 {
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(60px, -40px) scale(1.06); }
+            66% { transform: translate(-40px, 20px) scale(0.94); }
+          }
+        `}</style>
+      </div>
+
       {/* Left Panel — Chat */}
-      <div className="w-[35%] flex flex-col border-r" style={{ borderColor: '#c9a84c22' }}>
+      <div className="w-[35%] flex flex-col border-r relative" style={{ borderColor: '#c9a84c22', zIndex: 1 }}>
 
         <div className="p-6 border-b" style={{ borderColor: '#c9a84c22' }}>
           <h1 className="text-2xl font-bold tracking-widest" style={{ color: '#c9a84c', fontFamily: 'Playfair Display, serif' }}>
@@ -184,17 +233,20 @@ function ChatContent() {
           ))}
           {loading && (
             <div className="flex justify-start">
-              <div className="px-4 py-2 rounded-2xl text-sm" style={{ backgroundColor: '#131929', color: '#4a5568' }}>
-                RYOKO is thinking...
+              <div className="px-4 py-3 rounded-2xl text-sm flex gap-1 items-center" style={{ backgroundColor: '#131929' }}>
+                <span className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: '#c9a84c', animationDelay: '0ms' }} />
+                <span className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: '#c9a84c', animationDelay: '150ms' }} />
+                <span className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: '#c9a84c', animationDelay: '300ms' }} />
               </div>
             </div>
           )}
+          <div ref={messagesEndRef} />
         </div>
 
         <div className="p-4 border-t" style={{ borderColor: '#c9a84c22' }}>
           <div className="flex gap-2">
             <input
-              ref={inputRef}
+              ref={chatInputRef}
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -203,6 +255,7 @@ function ChatContent() {
               className="flex-1 px-4 py-2 rounded-full text-sm text-white outline-none"
               style={{ backgroundColor: '#131929', border: '1px solid #c9a84c44' }}
               disabled={loading}
+              autoFocus
             />
             <button
               onClick={sendMessage}
@@ -218,7 +271,7 @@ function ChatContent() {
       </div>
 
       {/* Right Panel — Output */}
-      <div className="w-[65%] overflow-y-auto p-8">
+      <div className="w-[65%] overflow-y-auto p-8 relative" style={{ zIndex: 1 }}>
 
         {stage === 'chat' && (
           <div className="h-full flex items-center justify-center">
@@ -358,7 +411,7 @@ function ChatContent() {
 
 export default function ChatPage() {
   return (
-    <Suspense>
+    <Suspense fallback={null}>
       <ChatContent />
     </Suspense>
   );
